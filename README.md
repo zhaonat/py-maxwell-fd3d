@@ -10,3 +10,7 @@ There is also a preconditioners to render the system matrix symmetric.
 1. Plane Wave
 
 2. Dipole in Vacuum
+
+
+## Future
+Expect integration of this with ceviche for autograd
