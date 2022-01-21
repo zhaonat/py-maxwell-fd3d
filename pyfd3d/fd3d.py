@@ -4,16 +4,17 @@ from .derivatives import *
 from .pml import *
 from typing import *
 
-def curlcurlE(L0: float, #L0 scaling parameter for distance units, usually 1e-6
-              wvlen: float, # wvlen in units of L0
-              xrange: np.array, #(xmin, xmax) in units of L0
-              yrange: np.array, #(xmin, xmax) in units of L0
-              zrange: np.array, #(xmin, xmax) in units of L0
-              eps_r_tensor_dict, 
-              JCurrentVector,
-              Npml, 
-              s = -1,
-              symmetrize = 0):
+def curlcurlE(
+    L0: float, #L0 scaling parameter for distance units, usually 1e-6
+    wvlen: float, # wvlen in units of L0
+    xrange: np.array, #(xmin, xmax) in units of L0
+    yrange: np.array, #(xmin, xmax) in units of L0
+    zrange: np.array, #(xmin, xmax) in units of L0
+    eps_r_tensor_dict: dict, 
+    JCurrentVector: dict,
+    Npml, 
+    s = -1
+):
     
     # normal SI parameters
     eps0 = 8.85*10**-12*L0;
@@ -89,24 +90,17 @@ def curlcurlE(L0: float, #L0 scaling parameter for distance units, usually 1e-6
     WAccelScal = sp.identity(3*M)@iTmuSuper;
     A = Ch@iTmuSuper@Ce + s*WAccelScal@GradDiv - omega**2*TepsSuper;
     
-    ## symmetrizer
-    Sxf, Syf, Szf, Sxb, Syb, Szb =  create_sc_pml(omega, dL, N, Npml, eps0, eta0)
-    Pl, Pr = create_symmetrizer(Sxf, Syf, Szf, Sxb, Syb, Szb)
-    if(symmetrize==1):
-        A = Pl@A@Pr
-    
     ## source setup
-    Jx = JCurrentVector['Jx'].flatten()
-    Jy = JCurrentVector['Jy'].flatten()
-    Jz = JCurrentVector['Jz'].flatten()
+    Jx = JCurrentVector['Jx'].flatten(order = 'F')
+    Jy = JCurrentVector['Jy'].flatten(order = 'F')
+    Jz = JCurrentVector['Jz'].flatten(order = 'F')
     
     J = np.concatenate((Jx,Jy,Jz), axis = 0);
-    
+    print(J.shape)
     
     b = -1j*omega*J; 
-    JCorrection = (1j/omega) * (s*GradDiv@WAccelScal)@iTepsSuper*J;
+    JCorrection = (1j/omega) * (s*GradDiv@WAccelScal)@iTepsSuper@J;
     b = b+JCorrection;
-    print(b.shape)
     
     return A,b, Ch # last arg let's you recover H fields
 
