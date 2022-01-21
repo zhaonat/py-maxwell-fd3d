@@ -17,6 +17,8 @@ The only function one really has to worry about is the one in fd3d.py This allow
 ## Iterative Solvers
 QMR and BICG-STAB are the first go-to solvers. Also for faster running, instead of using scipy's solvers, a number of other solvers:
 
+## Direct Solvers
+Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
 
 ## Future
 Expect integration of this with ceviche for autograd
