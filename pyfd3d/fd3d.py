@@ -4,11 +4,11 @@ from .derivatives import *
 from .pml import *
 from typing import *
 
-def curlcurlE(L0: float,
-              wvlen: float, 
-              xrange: np.array, 
-              yrange: np.array, 
-              zrange: np.array, 
+def curlcurlE(L0: float, #L0 scaling parameter for distance units, usually 1e-6
+              wvlen: float, # wvlen in units of L0
+              xrange: np.array, #(xmin, xmax) in units of L0
+              yrange: np.array, #(xmin, xmax) in units of L0
+              zrange: np.array, #(xmin, xmax) in units of L0
               eps_r_tensor_dict, 
               JCurrentVector,
               Npml, 
