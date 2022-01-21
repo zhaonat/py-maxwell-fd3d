@@ -9,6 +9,9 @@ The only function one really has to worry about is the one in fd3d.py This allow
 # important notes about implementation
 1. Note that arrays are ordered using column-major (or Fortan) ordering whereas numpy is natively row-major or C ordering. You will see this in operations like reshape where I specify ordering (x.reshape(ordering = 'F')). It will also appear in meshgrid operations (use indexing = 'ij'). 
 
+### Recommended Visualization in 3D: Plotly
+see some of the examples below
+
 ## Examples
 1. Plane Wave (plane-wave test)
 
@@ -19,6 +22,7 @@ QMR and BICG-STAB are the first go-to solvers. Also for faster running, instead 
 
 ## Direct Solvers
 Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
+
 
 ## Future
 Expect integration of this with ceviche for autograd
