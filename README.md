@@ -11,6 +11,9 @@ There is also a preconditioners to render the system matrix symmetric.
 
 2. Dipole in Vacuum
 
+## Iterative Solvers
+QMR and BICG-STAB are the first go-to solvers. Also for faster running, instead of using scipy's solvers, a number of other solvers:
+
 
 ## Future
 Expect integration of this with ceviche for autograd
