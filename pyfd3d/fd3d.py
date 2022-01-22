@@ -3,6 +3,7 @@ import scipy.sparse as sp
 from .derivatives import *
 from .pml import *
 from typing import *
+from .utils import *
 
 def curlcurlE(
     L0: float, #L0 scaling parameter for distance units, usually 1e-6
@@ -26,6 +27,12 @@ def curlcurlE(
     eps_xx = eps_r_tensor_dict['eps_xx']
     eps_yy = eps_r_tensor_dict['eps_yy']
     eps_zz = eps_r_tensor_dict['eps_zz']
+    
+    ## edge smoothing of eps_xx, eps_yy, eps_zz
+    eps_xx = bwdmean(eps_xx, 'x')
+    eps_yy = bwdmean(eps_yy, 'y')
+    eps_zz = bwdmean(eps_zz, 'z')
+    
      
     N = eps_xx.shape;
     M = np.prod(N);
@@ -33,13 +40,13 @@ def curlcurlE(
     L = np.array([np.diff(xrange)[0], np.diff(yrange)[0], np.diff(zrange)[0]]);
     dL = L/N
     
-    Tepz = sp.spdiags(eps0*eps_zz.flatten(), 0, M,M);
-    Tepx = sp.spdiags(eps0*eps_xx.flatten(), 0, M,M);
-    Tepy = sp.spdiags(eps0*eps_yy.flatten(), 0, M,M);
+    Tepz = sp.spdiags(eps0*eps_zz.flatten(order = 'F'), 0, M,M);
+    Tepx = sp.spdiags(eps0*eps_xx.flatten(order = 'F'), 0, M,M);
+    Tepy = sp.spdiags(eps0*eps_yy.flatten(order = 'F'), 0, M,M);
 
-    iTepz = sp.spdiags(1/(eps0*eps_zz.flatten()), 0, M,M);
-    iTepx = sp.spdiags(1/(eps0*eps_xx.flatten()), 0, M,M);
-    iTepy = sp.spdiags(1/(eps0*eps_yy.flatten()), 0, M,M);
+    iTepz = sp.spdiags(1/(eps0*eps_zz.flatten(order = 'F')), 0, M,M);
+    iTepx = sp.spdiags(1/(eps0*eps_xx.flatten(order = 'F')), 0, M,M);
+    iTepy = sp.spdiags(1/(eps0*eps_yy.flatten(order = 'F')), 0, M,M);
     
     iTepsSuper = sp.block_diag((iTepx, iTepy, iTepz));
     TepsSuper = sp.block_diag((Tepx, Tepy, Tepz));
