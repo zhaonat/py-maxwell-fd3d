@@ -1,106 +1,113 @@
 import numpy as np
 import scipy.sparse as sp
 
-# function [grading] = tanh_grading(start_value, end_value, num_points)
+def tanh_grading(start_value, end_value, num_points):
     
 #     % a tanh function appears to be smoother at the edges of the grid
-#     % so I'm going to try this
 
-#     center = min(start_value, end_value)+abs(end_value-start_value)/2;
-#     xspace = linspace(start_value, end_value, num_points);
-#     grading = tanh(xspace-center);
+    center = np.min(start_value, end_value)+np.abs(end_value-start_value)/2;
+    xspace = np.linspace(start_value, end_value, num_points);
+    grading = np.tanh(xspace-center);
+    return grading
     
-    
-# end
 
-# function grading = logarithmic_grading(h0, hf,N)
-#     % alpha: grading factor
-#     % N, number of steps to grade down to
-#     grading = logspace(log10(h0), log10(hf), N);
+def logarithmic_grading(h0, hf,N):
+    # alpha: grading factor
+    # N, number of steps to grade down to
+    grading = np.logspace(np.log10(h0), np.log10(hf), N);
+    return grading
 
-# end
 
-def non_uniform_scaling_operator(dx_scale, dy_scale):
+def non_uniform_scaling_operator(dx_scale, dy_scale, dz_scale):
     
 #     %operators which perform the row-wise scaling
 #     %xs: 1D array containing dx scalings (only for forward differences
     
     # create grid of x and y points
-    [Xs, Ys] = meshgrid(dx_scale, dy_scale);
-    %meshgrid isn't right for y
-    M = numel(Xs);
-
-    # we have to this kind of flip because the flattening
-    # operation (:) doesn't retain row-major order
-    Ys=Ys'; Xs = Xs';
-    Fsy = spdiags(Ys(:),0,M,M);
-    Fsx = spdiags(Xs(:),0,M,M);
+    [Xs, Ys, Zs] = np.meshgrid(dx_scale, dy_scale, dz_scale, indexing = 'ij');
+    M = np.prod(Xs.shape);
+                           
+    Fsx = sp.spdiags(Xs.flatten(),0,M,M)
+    Fsy = sp.spdiags(Ys.flatten(),0,M,M)
+    Fsz = sp.spdiags(Zs.flatten(), 0, M,M)                    
     
     # might as well construct the conjugate grid.
-    xc = (dx_scale+circshift(dx_scale,[0,1]))/2;
-    yc = (dy_scale+circshift(dy_scale,[0,1]))/2;
+    xc = (dx_scale + np.roll(dx_scale,[0,1]))/2;
+    yc = (dy_scale + np.roll(dy_scale,[0,1]))/2;
+    zc = (dz_scale + np.roll(dz_scale,[0,1]))/2;
+    [Xc, Yc, Zc] = meshgrid(xc, yc, zc, indexing='ij')
+
+    Fsy_conj = spdiags(Yc.flatten(order = 'F'),0,M,M)
+    Fsx_conj = spdiags(Xc.flatten(order = 'F'),0,M,M)
+    Fsz_conj = spdiags(Zc.flatten(order = 'F'),0,M,M)
     
-    [Xc, Yc] = meshgrid(xc, yc);
-    Xc = Xc';
-    Yc = Yc';
-    Fsy_conj = spdiags(Yc(:),0,M,M);
-    Fsx_conj = spdiags(Xc(:),0,M,M);
-    
-    return Fsx, Fsy, Fsz Fsx_conj, Fsy_conj
+    return Fsx, Fsy, Fsz, Fsx_conj, Fsy_conj
     
 
 
-def generate_nonuniform_scaling(Nft, drt):
+def generate_nonuniform_scaling(
+    Nft, 
+    drt, 
+    scale_func
+):
     
-    %Nft: 1st column is x, 2nd column is y
-    %drt: list of discretizations...normalized by some reference
-    % we can express drt as proportions of the largest discretization
-    % available on the grid...but seems inefficient
-    % advantage is we don't have to rewrite the pml sfactor
+    #Nft: 1st column is x, 2nd column is y
+    #drt: list of discretizations...normalized by some reference
+    # we can express drt as proportions of the largest discretization
+    # available on the grid...but seems inefficient
+    # advantage is we don't have to rewrite the pml sfactor
 
-    Nx = sum(Nft(:,1));
-    Ny = sum(Nft(:,2));
-    dx_scale = ones(1,Nx);
-    dy_scale = ones(1,Ny);
-    
-    num_regions = length(Nft(:,1));
-    x0 = 1; y0 = 1;
+    Nx = np.sum(Nft[:,0])
+    Ny = np.sum(Nft[:,1])
+    Nz = np.sum(Nft[:,2])                          
+    dx_scale = np.ones(Nx)
+    dy_scale = np.ones(Ny)
+    dz_scale = np.ones(Nx)
+    num_regions = len(Nft)
+    x0 = y0 = z0 = 0
     
 #     % Here, we can assume that all odd indices are fixed regions
 #     % even indices are transition regions
     
-    for i = 1:2:num_regions
-       dx_scale(x0:x0+Nft(i,1)-1) = drt(i,1);
-       dy_scale(y0:y0+Nft(i,2)-1) = drt(i,2);
+    for i in range(0, num_regions, 2): #= 1:2:num_regions
+        dx_scale[x0:x0+Nft[i,0]-1] = drt[i,0]
+        dy_scale[y0:y0+Nft[i,1]-1] = drt[i,1]
+        dz_scale[z0:z0+Nft[i,2]-1] = drt[i,2]
+
+        if(i==num_regions-1): #o transition after last region
+            x0 = x0+Nft[i,0];
+            y0 = y0+Nft[i,1];
+            z0 = z0+Nft[i,2]
+        else:
+            x0 = x0+Nft[i,1]+Nft[i+1,0];
+            y0 = y0+Nft[i,2]+Nft[i+1,1];
+            z0 = z0+Nft[i,2]+Nft[i+1,2]
+
     
+    # do some sort of grading from region i to region i+1
+    x0 = Nft[0,0]
+    y0 = Nft[0,1]
+    z0 = Nft[0,2]   
+                  
+    for i in range(1, num_regions, 2): #= 2:2:num_regions
+        dx1 = drt[i-1,0]; dx2 = drt[i+1,0];
+        dy1 = drt[i-1,1]; dy2 = drt[i+1,1];
+        dz1 = drt[i-1,2]; dz2 = drt[i+1,2];
+                    
+        nxt = Nft[i,0] 
+        nyt = Nft[i,1]
+        nzt = Nft[i,2]                     
 
-       if(i==num_regions) %no transition after last region
-           x0 = x0+Nft(i,1);
-           y0 = y0+Nft(i,2);
-       else
-           x0 = x0+Nft(i,1)+Nft(i+1,1);
-           y0 = y0+Nft(i,2)+Nft(i+1,2);
-       end
-        
-    end
-    
-    % do some sort of grading from region i to region i+1
-    x0 = Nft(1,1); y0 = Nft(1,2);
-    for i = 2:2:num_regions
-        dx1 = drt(i-1,1); dx2 = drt(i+1,1);
-        dy1 = drt(i-1,2); dy2 = drt(i+1,2);
-        nxt = Nft(i,1); nyt = Nft(i,2);
-        
-        %need a function to grade smoothly from dr1 to dr2
-        %equation to solve is there is some ration dr1/dr2 
-        % need to multiply dr1 by constant nt times.
+        grading_x = np.logspace(np.log10(dx1), np.log10(dx2), nxt+1);
+        grading_y = np.logspace(np.log10(dy1), np.log10(dy2), nyt+1);
+        grading_z = np.logspace(np.log10(dy1), np.log10(dy2), nyt+1);
+                               
+        dx_scale[x0:x0+nxt] = grading_x;
+        dy_scale[y0:y0+nyt] = grading_y;
+        dz_scale[z0:z0+nyt] = grading_z;
+                               
+        x0 = x0+Nft[i,0]+Nft[i+1,0]; 
+        y0 = y0+Nft[i,1]+Nft[i+1,1];
+        z0 = z0+Nft[i,2]+Nft[i+1,2]                       
 
-        grading_x = logspace(log10(dx1), log10(dx2), nxt+1);
-        grading_y = logspace(log10(dy1), log10(dy2), nyt+1);
-
-        dx_scale(x0:x0+nxt) = grading_x;
-        dy_scale(y0:y0+nyt) = grading_y;
-        x0 = x0+Nft(i,1)+Nft(i+1,1); 
-        y0 = y0+Nft(i,2)+Nft(i+1,2);
-
-    return
+    return dx_scale, dy_scale, dz_scale
