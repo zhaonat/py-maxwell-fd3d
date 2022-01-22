@@ -27,28 +27,27 @@ def non_uniform_scaling_operator(dx_scale, dy_scale, dz_scale):
     [Xs, Ys, Zs] = np.meshgrid(dx_scale, dy_scale, dz_scale, indexing = 'ij');
     M = np.prod(Xs.shape);
                            
-    Fsx = sp.spdiags(Xs.flatten(),0,M,M)
-    Fsy = sp.spdiags(Ys.flatten(),0,M,M)
-    Fsz = sp.spdiags(Zs.flatten(), 0, M,M)                    
+    Fsx = sp.spdiags(Xs.flatten(order = 'F'),0,M,M)
+    Fsy = sp.spdiags(Ys.flatten(order = 'F'),0,M,M)
+    Fsz = sp.spdiags(Zs.flatten(order = 'F'), 0, M,M)                    
     
     # might as well construct the conjugate grid.
     xc = (dx_scale + np.roll(dx_scale,[0,1]))/2;
     yc = (dy_scale + np.roll(dy_scale,[0,1]))/2;
     zc = (dz_scale + np.roll(dz_scale,[0,1]))/2;
-    [Xc, Yc, Zc] = meshgrid(xc, yc, zc, indexing='ij')
+    [Xc, Yc, Zc] = np.meshgrid(xc, yc, zc, indexing='ij')
 
-    Fsy_conj = spdiags(Yc.flatten(order = 'F'),0,M,M)
-    Fsx_conj = spdiags(Xc.flatten(order = 'F'),0,M,M)
-    Fsz_conj = spdiags(Zc.flatten(order = 'F'),0,M,M)
+    Fsy_conj = sp.spdiags(Yc.flatten(order = 'F'),0,M,M)
+    Fsx_conj = sp.spdiags(Xc.flatten(order = 'F'),0,M,M)
+    Fsz_conj = sp.spdiags(Zc.flatten(order = 'F'),0,M,M)
     
-    return Fsx, Fsy, Fsz, Fsx_conj, Fsy_conj
+    return Fsx, Fsy, Fsz, Fsx_conj, Fsy_conj, Fsz_conj
     
 
 
 def generate_nonuniform_scaling(
-    Nft, 
-    drt, 
-    scale_func
+    Nft: np.array, 
+    drt: np.array, 
 ):
     
     #Nft: 1st column is x, 2nd column is y
@@ -70,9 +69,9 @@ def generate_nonuniform_scaling(
 #     % even indices are transition regions
     
     for i in range(0, num_regions, 2): #= 1:2:num_regions
-        dx_scale[x0:x0+Nft[i,0]-1] = drt[i,0]
-        dy_scale[y0:y0+Nft[i,1]-1] = drt[i,1]
-        dz_scale[z0:z0+Nft[i,2]-1] = drt[i,2]
+        dx_scale[x0:x0+Nft[i,0]] = drt[i,0]
+        dy_scale[y0:y0+Nft[i,1]] = drt[i,1]
+        dz_scale[z0:z0+Nft[i,2]] = drt[i,2]
 
         if(i==num_regions-1): #o transition after last region
             x0 = x0+Nft[i,0];
@@ -100,11 +99,11 @@ def generate_nonuniform_scaling(
 
         grading_x = np.logspace(np.log10(dx1), np.log10(dx2), nxt+1);
         grading_y = np.logspace(np.log10(dy1), np.log10(dy2), nyt+1);
-        grading_z = np.logspace(np.log10(dy1), np.log10(dy2), nyt+1);
+        grading_z = np.logspace(np.log10(dz1), np.log10(dz2), nzt+1);
                                
-        dx_scale[x0:x0+nxt] = grading_x;
-        dy_scale[y0:y0+nyt] = grading_y;
-        dz_scale[z0:z0+nyt] = grading_z;
+        dx_scale[x0:x0+nxt+1] = grading_x;
+        dy_scale[y0:y0+nyt+1] = grading_y;
+        dz_scale[z0:z0+nzt+1] = grading_z;
                                
         x0 = x0+Nft[i,0]+Nft[i+1,0]; 
         y0 = y0+Nft[i,1]+Nft[i+1,1];
