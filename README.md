@@ -9,6 +9,10 @@ The only function one really has to worry about is the one in fd3d.py This allow
 # important notes about implementation
 1. Note that arrays are ordered using column-major (or Fortan) ordering whereas numpy is natively row-major or C ordering. You will see this in operations like reshape where I specify ordering (x.reshape(ordering = 'F')). It will also appear in meshgrid operations (use indexing = 'ij'). 
 
+## preconditioning-based approach for add-on functionality
+Non-uniform grid can be implemented as a set of non-symmetric preconditioners.
+
+
 ### Recommended Visualization in 3D: Plotly
 see some of the examples below
 
