@@ -24,7 +24,9 @@ see some of the examples below
 3. 3D waveguide
 
 ## Iterative Solvers
-QMR and BICG-STAB are the first go-to solvers. Also for faster running, instead of using scipy's solvers, a number of other solvers:
+QMR and BICG-STAB are the first go-to solvers. In general though, if you are going from 2D FDFD to 3D, solvers are going to be a lot slower without hardware or code acceleration.
+
+External solvers include packages like petsc or suitesparse (but I'm still looking for good python interfaces for any external solvers).
 
 ## Direct Solvers
 Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
