@@ -21,6 +21,8 @@ see some of the examples below
 
 2. Dipole in Vacuum (vacuum.ipynb)
 
+3. 3D waveguide
+
 ## Iterative Solvers
 QMR and BICG-STAB are the first go-to solvers. Also for faster running, instead of using scipy's solvers, a number of other solvers:
 
