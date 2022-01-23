@@ -23,6 +23,9 @@ see some of the examples below
 
 3. 3D waveguide
 
+## Modal Sources
+For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
+
 ## Iterative Solvers
 QMR and BICG-STAB are the first go-to solvers. In general though, if you are going from 2D FDFD to 3D, solvers are going to be a lot slower without hardware or code acceleration.
 
