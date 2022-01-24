@@ -19,10 +19,11 @@ Non-uniform grid can be implemented as a set of diagonal scaling preconditioners
 see some of the examples below
 
 ## Examples
-1. Plane Wave (plane-wave test)
 
-2. Dipole in Vacuum (vacuum.ipynb)
+1. Dipole in Vacuum (vacuum.ipynb)
 ![Alt text](./img/vacuum_slices.png?raw=true "Title")
+
+2. Plane Wave (plane-wave test)
 
 
 3. 3D waveguide
