@@ -27,12 +27,15 @@ see some of the examples below
 
 
 3. 3D waveguide
+4. Photonic Crystal Slab: lgmres
 
 ## Modal Sources
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
 
 ## Iterative Solvers
-QMR and BICG-STAB are the first go-to solvers. In general though, if you are going from 2D FDFD to 3D, solvers are going to be a lot slower without hardware or code acceleration.
+Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. convergence) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
+
+For now, the solvers I've tried in scipy's sparse.linalg library are QMR and BICG-STAB and LGMRES. BICG-STAB and QMR are usually your go-to solvers but I've noticed some cases where LGMRES performs better.
 
 External solvers include packages like petsc or suitesparse (but I'm still looking for good python interfaces for any external solvers).
 
