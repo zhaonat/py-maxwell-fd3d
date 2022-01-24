@@ -1,4 +1,4 @@
-# py-maxwell-fdfd
+# py-maxwell-fd3d
 Solving Maxwell's equations via A python implementation of the 3D curl-curl E-field equations. This code contains additional work to engineer the eignspectrum for better convergence with iterative solvers (using the Beltrami-Laplace operator). You can control this in the main function through the input parameter $s = {0,-1,1}$
 
 There is also a preconditioners to render the system matrix symmetric.
