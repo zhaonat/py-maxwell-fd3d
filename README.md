@@ -20,7 +20,7 @@ see some of the examples below
 
 ## Examples
 
-1. Dipole in Vacuum (vacuum.ipynb)
+1. Dipole in Vacuum (vacuum.ipynb): a radiating dipole in vacuum with the domain truncated by a PML.
 ![Alt text](./img/vacuum_slices.png?raw=true "Title")
 
 2. Plane Wave (plane-wave test)
