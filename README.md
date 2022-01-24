@@ -1,5 +1,5 @@
 # py-maxwell-fd3d
-Solving Maxwell's equations via A python implementation of the 3D curl-curl E-field equations. This code contains additional work to engineer the eignspectrum for better convergence with iterative solvers (using the Beltrami-Laplace operator). You can control this in the main function through the input parameter $s = {0,-1,1}$
+Solving Maxwell's equations via A python implementation of the 3D curl-curl E-field equations. The primary purpose of this code is to expose the underlying techniques for generating finite differences in a relatively transparent way (so no classes or complicated interfaces). This code contains additional work to engineer the eignspectrum for better convergence with iterative solvers (using the Beltrami-Laplace operator). You can control this in the main function through the input parameter $s = {0,-1,1}$
 
 There is also a preconditioners to render the system matrix symmetric.
 
@@ -12,6 +12,8 @@ The only function one really has to worry about is the one in fd3d.py This allow
 ## preconditioning-based approach for add-on functionality
 Non-uniform grid can be implemented as a set of diagonal scaling preconditioners. This includes the sc-pml as well as smooth nonuniform-gridding
 
+## Current Issues
+1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging.
 
 ### Recommended Visualization in 3D: Plotly
 see some of the examples below
