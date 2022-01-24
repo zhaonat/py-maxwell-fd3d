@@ -20,6 +20,8 @@ see some of the examples below
 1. Plane Wave (plane-wave test)
 
 2. Dipole in Vacuum (vacuum.ipynb)
+![Alt text](./img/vacuum_slices.png?raw=true "Title")
+
 
 3. 3D waveguide
 
