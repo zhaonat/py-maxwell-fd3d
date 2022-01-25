@@ -48,6 +48,7 @@ External solvers include packages like petsc or suitesparse (but I'm still looki
 ## Direct Solvers
 Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
 
+Note that existing python interfaces to MUMPS are incomplete, they only support real valued matrices. (I will try to figure out a way to interface MUMPS easily with python)
 
 ## Future
 Expect integration of this with ceviche for autograd: requires that we have a fast and robust iterative solver (or direct)
