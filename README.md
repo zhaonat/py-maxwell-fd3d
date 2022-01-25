@@ -13,7 +13,7 @@ The only function one really has to worry about is the one in fd3d.py This allow
 Non-uniform grid can be implemented as a set of diagonal scaling preconditioners. This includes the sc-pml as well as smooth nonuniform-gridding
 
 ## Current Issues
-1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging.
+1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging. scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr
 
 ### Recommended Visualization in 3D: Plotly
 see some of the examples below
