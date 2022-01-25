@@ -25,7 +25,7 @@ For now, the solvers I've tried in scipy's sparse.linalg library are QMR and BIC
 External solvers include packages like petsc or suitesparse (but I'm still looking for good python interfaces for any external solvers).
 
 ## Direct Solvers
-Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS). Note that existing python interfaces to MUMPS are incomplete, they only support real valued matrices, so finding a way to use these might require you to do some digging or exporting the system matrix for use in an external solver.
+Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support a bunch-kauffman factorization for a complex symmetric matrix (reduces memory by 50%) and also use block low rank compression (i.e. MUMPS). Note that existing python interfaces to MUMPS are incomplete, they only support real valued matrices, so finding a way to use these might require you to do some digging or exporting the system matrix for use in an external solver.
 
 As a general note, for a reordering like nested dissection, we now that the fill-in scales as around O(n^(4/3)). So, if you want to simulate a 200x100x100 grid, that's around 6 million DOF and the fill-in will be on the order of 1 billion nonzeros. Compare that with 2D, where nested dissection only fill in as nlog(n).
 
