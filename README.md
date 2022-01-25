@@ -55,6 +55,9 @@ In general, scipy's sparse solvers are not ideal in terms of computational effic
 
 ![Alt text](./img/cylindrical_waveguide_Ex.png?raw=true "Title")
 
+![Alt text](./img/3d_waveguide_abs_slice.png?raw=true "Title")
+
+
 
 ### Recommended Visualization in 3D: Plotly
 see some of the examples below
