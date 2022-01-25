@@ -13,6 +13,7 @@ The only function one really has to worry about is the one in fd3d.py This allow
 Non-uniform grid can be implemented as a set of diagonal scaling preconditioners. This includes the sc-pml as well as smooth nonuniform-gridding
 
 ## Current Issues
+0. In general, scipy's sparse solvers are not ideal in terms of computational efficiency at tackling large 3D problems
 1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging. scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr. In general, it would appear best to use an external solver like petsc to solve the system most efficiently and effectively
 2. Not easy to implement modified versions of ILU preconditioning with scipy.sparse solvers, particularly block preconditioning.
 
