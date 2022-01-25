@@ -23,15 +23,15 @@ see some of the examples below
 1. Dipole in Vacuum (vacuum.ipynb): a radiating dipole in vacuum with the domain truncated by a PML.
 ![Alt text](./img/vacuum_slices.png?raw=true "Title")
 
-2. Plane Wave (plane-wave test)
-
-
-3. 3D waveguide
+2. Plane Wave (plane-wave test, unidirectional plane wave source)
 
 
 4. Photonic Crystal Slab: lgmres
 ![Alt text](./img/phc_slab_slices.png?raw=true "Title")
 ![Alt text](./img/phc_eps_r_slices.png?raw=true "Title")
+
+4. 3D waveguide
+
 
 
 ## Modal Sources
