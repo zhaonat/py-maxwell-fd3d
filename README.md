@@ -12,8 +12,28 @@ The only function one really has to worry about is the one in fd3d.py This allow
 ## preconditioning-based approach for add-on functionality
 Non-uniform grid can be implemented as a set of diagonal scaling preconditioners. This includes the sc-pml as well as smooth nonuniform-gridding
 
-## Current Issues
-0. In general, scipy's sparse solvers are not ideal in terms of computational efficiency at tackling large 3D problems
+
+# Numerical Solution to the Linear System
+Solving the 3D linear system of the curl-curl equation is not easy. 
+
+## Proposed external package: Petsc and petsc4py
+
+
+## Iterative Solvers
+Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. convergence) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
+
+For now, the solvers I've tried in scipy's sparse.linalg library are QMR and BICG-STAB and LGMRES. BICG-STAB and QMR are usually your go-to solvers but I've noticed some cases where LGMRES performs better.
+
+External solvers include packages like petsc or suitesparse (but I'm still looking for good python interfaces for any external solvers).
+
+## Direct Solvers
+Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
+
+Note that existing python interfaces to MUMPS are incomplete, they only support real valued matrices. 
+
+## General issues with using scipy.sparse
+In general, scipy's sparse solvers are not ideal in terms of computational efficiency at tackling large 3D problems
+
 1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging. scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr. In general, it would appear best to use an external solver like petsc to solve the system most efficiently and effectively
 2. Not easy to implement modified versions of ILU preconditioning with scipy.sparse solvers, particularly block preconditioning.
 
@@ -39,17 +59,6 @@ see some of the examples below
 ## Modal Sources
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
 
-## Iterative Solvers
-Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. convergence) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
-
-For now, the solvers I've tried in scipy's sparse.linalg library are QMR and BICG-STAB and LGMRES. BICG-STAB and QMR are usually your go-to solvers but I've noticed some cases where LGMRES performs better.
-
-External solvers include packages like petsc or suitesparse (but I'm still looking for good python interfaces for any external solvers).
-
-## Direct Solvers
-Direct solvers are robust but are incredibly memory inefficient, particulary for the curl-curl equations in 3D. If you want to experiment with solvers, try packages which support an LDL factorization for a complex symmetric matrix and also use block low rank compression (i.e. MUMPS).
-
-Note that existing python interfaces to MUMPS are incomplete, they only support real valued matrices. (I will try to figure out a way to interface MUMPS easily with python)
 
 ## Future
 Expect integration of this with ceviche for autograd: requires that we have a fast and robust iterative solver (or direct)
