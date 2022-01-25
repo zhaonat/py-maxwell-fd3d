@@ -27,7 +27,11 @@ see some of the examples below
 
 
 3. 3D waveguide
+
+
 4. Photonic Crystal Slab: lgmres
+![Alt text](./img/phc_slab_slices.png?raw=true "Title")
+
 
 ## Modal Sources
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
