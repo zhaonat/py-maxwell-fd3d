@@ -16,8 +16,6 @@ Non-uniform grid can be implemented as a set of diagonal scaling preconditioners
 # Numerical Solution to the Linear System
 Solving the 3D linear system of the curl-curl equation is not easy. 
 
-## Proposed external package: Petsc and petsc4py
-
 
 ## Iterative Solvers
 Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. iterative solvers need to converge which isn't always gauranteed) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
@@ -37,16 +35,15 @@ In general, scipy's sparse solvers are not ideal in terms of computational effic
 1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging. scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr. In general, it would appear best to use an external solver like petsc to solve the system most efficiently and effectively
 2. Not easy to implement modified versions of ILU preconditioning with scipy.sparse solvers, particularly block preconditioning.
 
-### Recommended Visualization in 3D: Plotly
-see some of the examples below
+## Proposed external package: Petsc and petsc4py
 
-## Examples
+
+# Examples
 
 1. Dipole in Vacuum (vacuum.ipynb): a radiating dipole in vacuum with the domain truncated by a PML.
 ![Alt text](./img/vacuum_slices.png?raw=true "Title")
 
 2. Plane Wave (plane-wave test, unidirectional plane wave source)
-
 
 3. Photonic Crystal Slab: lgmres
 ![Alt text](./img/phc_slab_slices.png?raw=true "Title")
@@ -55,10 +52,10 @@ see some of the examples below
 ![Alt text](./img/cylindrical_waveguide_Ex.png?raw=true "Title")
 
 
+### Recommended Visualization in 3D: Plotly
+see some of the examples below
 
-## Modal Sources
+# Modal Sources
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
 
 
-## Future
-Expect integration of this with ceviche for autograd: requires that we have a fast and robust iterative solver (or direct)
