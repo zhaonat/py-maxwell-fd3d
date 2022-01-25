@@ -41,14 +41,17 @@ In general, scipy's sparse solvers are not ideal in terms of computational effic
 # Examples
 
 1. Dipole in Vacuum (vacuum.ipynb): a radiating dipole in vacuum with the domain truncated by a PML.
-![Alt text](./img/vacuum_slices.png?raw=true "Title")
 
 2. Plane Wave (plane-wave test, unidirectional plane wave source)
 
 3. Photonic Crystal Slab: lgmres
-![Alt text](./img/phc_slab_slices.png?raw=true "Title")
 
 4. 3D waveguide
+
+![Alt text](./img/vacuum_slices.png?raw=true "Title")
+
+![Alt text](./img/phc_slab_slices.png?raw=true "Title")
+
 ![Alt text](./img/cylindrical_waveguide_Ex.png?raw=true "Title")
 
 
