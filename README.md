@@ -20,7 +20,7 @@ Solving the 3D linear system of the curl-curl equation is not easy.
 
 
 ## Iterative Solvers
-Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. convergence) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
+Unfortunately, given that iterative solvers don't have the same kind of robustness as factorization (i.e. iterative solvers need to converge which isn't always gauranteed) combined with the fact that FDFD for Maxwell's equations are typically indefinite, iterative solving of equations is a bit more of an art than not. For different systems, solvers may converge reasonably or may not. 
 
 For now, the solvers I've tried in scipy's sparse.linalg library are QMR and BICG-STAB and LGMRES. BICG-STAB and QMR are usually your go-to solvers but I've noticed some cases where LGMRES performs better.
 
