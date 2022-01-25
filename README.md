@@ -50,4 +50,4 @@ Direct solvers are robust but are incredibly memory inefficient, particulary for
 
 
 ## Future
-Expect integration of this with ceviche for autograd
+Expect integration of this with ceviche for autograd: requires that we have a fast and robust iterative solver (or direct)
