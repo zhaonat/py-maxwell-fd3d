@@ -31,6 +31,7 @@ see some of the examples below
 
 4. Photonic Crystal Slab: lgmres
 ![Alt text](./img/phc_slab_slices.png?raw=true "Title")
+![Alt text](./img/phc_eps_r_slices.png?raw=true "Title")
 
 
 ## Modal Sources
