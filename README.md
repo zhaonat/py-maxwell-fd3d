@@ -32,8 +32,9 @@ As a general note, for a reordering like nested dissection, we now that the fill
 ## General issues with using scipy.sparse
 In general, scipy's sparse solvers are not ideal in terms of computational efficiency at tackling large 3D problems
 
-1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging. scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr. In general, it would appear best to use an external solver like petsc to solve the system most efficiently and effectively
-2. Not easy to implement modified versions of ILU preconditioning with scipy.sparse solvers, particularly block preconditioning.
+1. So far, it appears that using scipy's iterative solvers, the case of the finite width photonic crystal slab has some issues with converging, even with the beltrami-laplace operator (s=-1). scipy's lgmres and gcrotmk seems to work better, but are a lot slower than bicgstab or qmr. Note that $s=-1$ is useful in that it helps convert a lot of cases from completely non-converging to converging, but the convergence may still be slow.
+
+3. Not easy to implement modified versions of ILU preconditioning with scipy.sparse solvers, particularly block preconditioning.
 
 ## Proposed external package: Petsc and petsc4py
 
