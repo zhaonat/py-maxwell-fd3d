@@ -32,6 +32,7 @@ see some of the examples below
 ![Alt text](./img/phc_eps_r_slices.png?raw=true "Title")
 
 4. 3D waveguide
+![Alt text](./img/cylindrical_waveguide_Ex.png?raw=true "Title")
 
 
 
