@@ -68,3 +68,5 @@ A nice way to verify any mode-solver in FDFD is to check whether or not it actua
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
 
 
+# Nonuniform Grid
+We implement a simple continuously graded nonuniform grid. This can be helpful with higher-index structures and resolving intrinsic field discontinuities across interfaces, which is inevitable in 3D structures.
