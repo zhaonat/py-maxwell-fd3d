@@ -63,6 +63,8 @@ In general, scipy's sparse solvers are not ideal in terms of computational effic
 see some of the examples below
 
 # Modal Sources
+A nice way to verify any mode-solver in FDFD is to check whether or not it actually excites the pure mode when used as a source in an FDFD simulation.
+
 For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
 
 
