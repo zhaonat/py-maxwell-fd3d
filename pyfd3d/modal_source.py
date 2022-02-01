@@ -58,8 +58,36 @@ def eigen_2D_slice(
     return A
 
 
-def get_modes_of_operator():
-    pass
+def eigen_slice_kz(
+    L0: float, #L0 scaling parameter for distance units, usually 1e-6
+    wvlen: float, # wvlen in units of L0
+    xrange: np.array, #(xmin, xmax) in units of L0
+    yrange: np.array, #(xmin, xmax) in units of L0
+    eps_r,
+    Npml, 
+):
+    '''
+        eigensolver for a specific longitudinal wavevector kz (assuming waveguide axis is parallel to z)
+    '''
+ 
+    epxx= bwd_mean(eps_r, 'x')
+    epyy = bwd_mean(eps_r,'y')
+
+    Tez = sp.diags(EPSILON0*epsilon.flatten(), 0, (M,M))
+    Tey = sp.diags(EPSILON0*epyy.flatten(), 0,  (M,M))
+    Tex = sp.diags(EPSILON0*epxx.flatten(), 0, (M,M))
+
+    invTez = sp.diags(1/(EPSILON0*epsilon.flatten()), 0,  (M,M))
+
+    Dop1 = sp.bmat([[-Dyf], [Dxf]])
+    Dop2 = sp.bmat([[-Dyb,Dxb]])
+    Dop3 = sp.bmat([[Dxb], [Dyb]])
+    Dop4 = sp.bmat([[Dxf,Dyf]])
+
+    Tep = sp.block_diag((Tey, Tex))
+    A =  Tep@(Dop1)@invTez@(Dop2) + Dop3@Dop4;
+    
+    return A
 
 
 # def mode_filtering(
