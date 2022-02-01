@@ -8,11 +8,11 @@ def bwdmean(center_array, w):
 
     ## Out Parameter
     # avg_array: 2D array of averaged values
-    shift = 0
+    shift = 1
     if(w == 'y'):
-        shift = 1 
+        shift = 2 
     if(w == 'z'):
-        shift = 2
+        shift = 3
     
     center_shifted = np.roll(center_array, shift); #doe sthis generalize easily into 3 Dimensions, CHECK!
     avg_array = (center_shifted + center_array) / 2;

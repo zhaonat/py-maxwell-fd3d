@@ -18,7 +18,10 @@ def S(l, dw, omega, epsilon_0, eta_0):
 
 def create_sfactor(s, omega, dL, N, N_pml, epsilon_0, eta_0):
     # used to help construct the S matrices for the PML creation
-
+    '''
+        eta_0: if dL is in units of micromeneters, eta_0 must be in units of micrometers 
+        epsilon_0: 
+    '''
     sfactor_vecay = np.ones(N, dtype=np.complex128)
     if N_pml < 1:
         return sfactor_vecay
