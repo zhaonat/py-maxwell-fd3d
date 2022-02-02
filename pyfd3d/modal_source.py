@@ -68,16 +68,35 @@ def eigen_slice_kz(
 ):
     '''
         eigensolver for a specific longitudinal wavevector kz (assuming waveguide axis is parallel to z)
+        output modes are the hx and hy fields
     '''
- 
-    epxx= bwd_mean(eps_r, 'x')
-    epyy = bwd_mean(eps_r,'y')
+    omega = 2*np.pi*C0/(wvlen*L0);  # angular frequency in rad/sec
 
-    Tez = sp.diags(EPSILON0*epsilon.flatten(), 0, (M,M))
-    Tey = sp.diags(EPSILON0*epyy.flatten(), 0,  (M,M))
-    Tex = sp.diags(EPSILON0*epxx.flatten(), 0, (M,M))
+    N2d = eps_r.shape
+    L = np.array([np.diff(xrange)[0], np.diff(yrange)[0]]);
+    dL2d = L/N2d
+    eps0 = EPS0*L0;
+    mu0 = MU0*L0
+    M = np.prod(N2d)
 
-    invTez = sp.diags(1/(EPSILON0*epsilon.flatten()), 0,  (M,M))
+    #ETA0 is unitless so we don't need any scaling
+    Sxfi, Sxbi, Syfi, Sybi, _,_ = S_create_3D(omega, [dL2d[0], dL2d[1], 1], [N2d[0], N2d[1], 1], [Npml[0], Npml[1],0], EPS0*L0, ETA0) #sp.identity(M);
+    
+    ## CREATE DERIVATIVES
+    Dxf = Sxfi@createDws('x', 'f', dL2d, N2d); 
+    Dxb = Sxbi@createDws('x', 'b', dL2d, N2d); 
+
+    Dyf = Syfi@createDws('y', 'f', dL2d, N2d);
+    Dyb = Sybi@createDws('y', 'b', dL2d, N2d); 
+
+    epxx= bwdmean(eps_r, 'x')
+    epyy = bwdmean(eps_r,'y')
+
+    Tez = sp.diags(eps0*eps_r.flatten(order = 'F'), 0, (M,M))
+    Tey = sp.diags(eps0*epyy.flatten(order = 'F'), 0,  (M,M))
+    Tex = sp.diags(eps0*epxx.flatten(order = 'F'), 0, (M,M))
+
+    invTez = sp.diags(1/(eps0*eps_r.flatten(order = 'F')), 0,  (M,M))
 
     Dop1 = sp.bmat([[-Dyf], [Dxf]])
     Dop2 = sp.bmat([[-Dyb,Dxb]])
@@ -85,7 +104,7 @@ def eigen_slice_kz(
     Dop4 = sp.bmat([[Dxf,Dyf]])
 
     Tep = sp.block_diag((Tey, Tex))
-    A =  Tep@(Dop1)@invTez@(Dop2) + Dop3@Dop4;
+    A =  Tep@(Dop1)@invTez@(Dop2) + Dop3@Dop4+ omega**2*mu0*Tep;
     
     return A
 
