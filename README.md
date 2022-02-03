@@ -63,7 +63,7 @@ see some of the examples below
 # Modal Sources
 A nice way to verify any mode-solver in FDFD is to check whether or not it actually excites the pure mode when used as a source in an FDFD simulation.
 
-For now, note that my other set of codes, eigenwell has a number of mode solvers. You can solve a single 2d mode problem but this implicitly assumes kz = 0. There is another mode solver for $kz!=0$ as well there, but this is a bit more computationally expensive.
+For now, note that my other set of codes, eigenwell has a number of mode solvers. The type of mode solver you want assumes a $k_z$ out of plane and then allows 2 dimensional variation in the other two directions (Note that the TE-TM mode solvers do not apply for the 3D waveguide case!)
 
 
 # Nonuniform Grid
